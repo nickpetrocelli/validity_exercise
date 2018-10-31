@@ -1,5 +1,6 @@
 package app.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.codec.language.Metaphone;
@@ -32,8 +33,36 @@ public class Entry {
   public Entry(String line) throws IllegalArgumentException{
     full_line = line;
     //Deliminate by string
-    List<String> list = Arrays.asList(line.split(","));
+    List<String> list1 = Arrays.asList(line.split(","));
+    ArrayList<String> list = new ArrayList<>(list1);
+    ArrayList<String> remove = new ArrayList<>();
 
+    //Need to handle case where comma appears in string
+    //Do this by combining elements bounded by " characters
+    boolean collecting = false;
+    String buf = "";
+    int pos = 0;
+    for (int i = 0; i<list.size(); i++){
+      if(list.get(i).contains("\"") && !collecting){
+        //Combine items contained by "
+        buf = buf + list.get(i);
+        pos = i;
+        collecting = true;
+      }
+      else if (list.get(i).contains("\"") && collecting){
+        remove.add(list.get(i));
+        buf = buf + list.get(i);
+        list.set(pos, buf);
+        buf = "";
+        collecting = false;
+      }
+      else if (collecting){
+        remove.add(list.get(i));
+        buf = buf + list.get(i);
+      }
+    }
+
+    list.removeAll(remove);
     //Check input
     if (list.size() != 12) {
       throw new IllegalArgumentException("Error: input string not valid csv entry");

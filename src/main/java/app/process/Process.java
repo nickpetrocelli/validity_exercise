@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import app.util.Entry;
@@ -13,7 +14,6 @@ import app.util.Entry;
  * Created by Nick on 10/30/18.
  */
 public class Process {
-  private static final String FILENAME = "Resources/Validity_take_home_exercise/normal.csv";
   private static final int COMP_THRESHOLD = 10;
 
   /**
@@ -25,6 +25,9 @@ public class Process {
     ArrayList<Entry> duplicates = new ArrayList<>();
     ArrayList<Entry> nonDuplicates = new ArrayList<>();
 
+    String FILENAME = Paths.get("").toAbsolutePath().toString();
+    //Temporary filename hack, pressed for time
+    FILENAME = FILENAME + "/test_resources/Validity_take_home_exercise/normal.csv";
     //Read lines
     try (BufferedReader br = new BufferedReader(new FileReader(FILENAME))) {
       String line;
@@ -50,8 +53,9 @@ public class Process {
       for (int j=i + 1; j<entryList.size(); j++) {
         int comp = entryList.get(i).compare(entryList.get(j));
         if (comp < COMP_THRESHOLD) {
-          duplicates.add(entryList.get(j));
+          duplicates.add(entryList.get(i));
           duped = true;
+          i++;
         }
       }
       if(!duped) {
