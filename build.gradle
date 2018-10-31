@@ -11,4 +11,8 @@ repositories {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile "com.sparkjava:spark-core:2.7.2"
+    compile group: 'org.apache.commons', name: 'commons-text', version: '1.6'
+
+    compile "commons-codec:commons-codec:1.11"
+    //compile 'org.apache.commons:commons-text:1.7-SNAPSHOT'
 }
